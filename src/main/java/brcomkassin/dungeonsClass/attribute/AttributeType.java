@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum AttributeType {
-    OFFENSIVE,
-    DEFENSIVE,
-    UTILITY,
-    MOBILITY;
-
+    OFFENSIVE(),
+    DEFENSIVE(),
+    UTILITY(),
+    MOBILITY();
 }
+
 

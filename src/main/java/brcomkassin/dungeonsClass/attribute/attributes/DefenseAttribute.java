@@ -3,8 +3,10 @@ package brcomkassin.dungeonsClass.attribute.attributes;
 import brcomkassin.dungeonsClass.attribute.Attribute;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class DefenseAttribute implements Attribute {
 
