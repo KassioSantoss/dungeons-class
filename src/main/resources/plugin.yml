@@ -1,0 +1,4 @@
+name: dungeons-class
+version: '1.0-SNAPSHOT'
+main: brcomkassin.dungeonsClass.DungeonsClassPlugin
+api-version: '1.21'
