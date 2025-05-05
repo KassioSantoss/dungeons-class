@@ -17,10 +17,10 @@ public final class Config extends YamlConfiguration {
         this.name = name;
         this.file = new File(plugin.getDataFolder(), name);
 
-        if (!file.exists()){
+        if (!file.exists()) {
             plugin.saveResource(name, false);
         }
-        reloadConfig();
+        reloadDefaultConfig();
     }
 
     public void saveConfig() {

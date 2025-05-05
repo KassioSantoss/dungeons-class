@@ -1,29 +1,32 @@
 package brcomkassin.dungeonsClass.attribute.user;
 
-import brcomkassin.dungeonsClass.attribute.*;
+import brcomkassin.dungeonsClass.attribute.DungeonClassInMemory;
+import brcomkassin.dungeonsClass.attribute.attributes.AttributeType;
+import brcomkassin.dungeonsClass.attribute.attributes.Attribute;
 import brcomkassin.dungeonsClass.classes.DungeonClass;
+import brcomkassin.dungeonsClass.utils.ColoredLogger;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.HashMap;
+import org.bukkit.entity.Player;
+
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class UserClass {
 
     private DungeonClass classe;
-    private final Map<AttributeType, Attribute> currentAttributes = new HashMap<>();
+    private Map<AttributeType, Set<Attribute>> currentAttributes;
 
-    public UserClass(DungeonClass classe) {
+    public UserClass(Player player, DungeonClass classe) {
         this.classe = classe;
-        this.currentAttributes.put(AttributeType.OFFENSIVE, this.classe.getInitialAttribute(AttributeType.OFFENSIVE));
-        this.currentAttributes.put(AttributeType.DEFENSIVE, this.classe.getInitialAttribute(AttributeType.DEFENSIVE));
-        this.currentAttributes.put(AttributeType.UTILITY, this.classe.getInitialAttribute(AttributeType.UTILITY));
-        this.currentAttributes.put(AttributeType.MOBILITY, this.classe.getInitialAttribute(AttributeType.MOBILITY));
+        currentAttributes = classe.getAttributes();
     }
 
-    public Attribute getAttribute(AttributeType type) {
-        return currentAttributes.get(type);
+    public Attribute getAttribute(AttributeType type, String name) {
+        return currentAttributes.get(type).stream().filter(a -> a.getName().equals(name.toUpperCase())).findFirst().orElse(null);
     }
 
 }

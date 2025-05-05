@@ -1,0 +1,53 @@
+classes:
+  Warrior:
+    attributes:
+      OFFENSIVE:
+        attackDamage: 60.0
+        critChance: 0.2
+        critMultiplier: 1.8
+      DEFENSIVE:
+        maxHealth: 150.0
+        armor: 30.0
+        magicResist: 20.0
+        dodgeChance: 0.05
+      UTILITY:
+        cooldownReduction: 0.1
+        resourceGain: 0.1
+      MOBILITY:
+        moveSpeed: 0.2
+        jumpHeight: 1.0
+  Mage:
+    attributes:
+      OFFENSIVE:
+        attackDamage: 60.0
+        critChance: 0.2
+        critMultiplier: 1.8
+      DEFENSIVE:
+        maxHealth: 150.0
+        armor: 30.0
+        magicResist: 20.0
+        dodgeChance: 0.05
+      UTILITY:
+        cooldownReduction: 0.1
+        resourceGain: 0.1
+      MOBILITY:
+        moveSpeed: 0.2
+        jumpHeight: 1.0
+  Ranger:
+    attributes:
+      OFFENSIVE:
+        attackDamage: 60.0
+        critChance: 0.2
+        critMultiplier: 1.8
+      DEFENSIVE:
+        maxHealth: 150.0
+        armor: 30.0
+        magicResist: 20.0
+        dodgeChance: 0.05
+      UTILITY:
+        cooldownReduction: 0.1
+        resourceGain: 0.1
+      MOBILITY:
+        moveSpeed: 0.2
+        jumpHeight: 1.0
+

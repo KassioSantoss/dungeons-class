@@ -1,31 +1,30 @@
 package brcomkassin.dungeonsClass.classes;
 
-import brcomkassin.dungeonsClass.attribute.*;
-import brcomkassin.dungeonsClass.attribute.attributes.DefenseAttribute;
-import brcomkassin.dungeonsClass.attribute.attributes.MobilityAttribute;
-import brcomkassin.dungeonsClass.attribute.attributes.OffensiveAttribute;
-import brcomkassin.dungeonsClass.attribute.attributes.UtilityAttribute;
+
+import brcomkassin.dungeonsClass.attribute.attributes.AttributeType;
+import brcomkassin.dungeonsClass.attribute.attributes.Attribute;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.*;
 
 @Getter
 @AllArgsConstructor
 public class DungeonClass {
 
     private String name;
-    private DefenseAttribute defenseAttributes;
-    private OffensiveAttribute offensiveAttributes;
-    private MobilityAttribute mobilityAttributes;
-    private UtilityAttribute utilityAttributes;
+    private final Map<AttributeType, Set<Attribute>> attributes = new HashMap<>();
 
-    public Attribute getInitialAttribute(AttributeType attributeType) {
-        return switch (attributeType) {
-            case OFFENSIVE -> offensiveAttributes;
-            case DEFENSIVE -> defenseAttributes;
-            case UTILITY -> utilityAttributes;
-            case MOBILITY -> mobilityAttributes;
-            default -> null;
-        };
+    public void addInitialAttributes(AttributeType type, Set<Attribute> attribute) {
+        attributes.put(type, attribute);
+    }
+
+    public void addAttribute(AttributeType type, Attribute attribute) {
+        attributes.computeIfAbsent(type, k -> new HashSet<>()).add(attribute);
+    }
+
+    public Attribute getAttribute(AttributeType type, String name) {
+        return attributes.get(type).stream().filter(a -> a.getName().equals(name.toUpperCase())).findFirst().orElse(null);
     }
 
 }

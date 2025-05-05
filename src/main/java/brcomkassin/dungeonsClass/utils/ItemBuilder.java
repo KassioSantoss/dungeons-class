@@ -1,6 +1,6 @@
 package brcomkassin.dungeonsClass.utils;
 
-import brcomkassin.artools.ArToolsPlugin;
+import brcomkassin.dungeonsClass.DungeonsClassPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public final class ItemBuilder {
 
-    private final JavaPlugin plugin = ArToolsPlugin.getInstance();
+    private final JavaPlugin plugin = DungeonsClassPlugin.getInstance();
 
     private final ItemStack itemStack;
 

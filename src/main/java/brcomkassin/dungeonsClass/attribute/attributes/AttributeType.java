@@ -1,5 +1,4 @@
-package brcomkassin.dungeonsClass.attribute;
-
+package brcomkassin.dungeonsClass.attribute.attributes;
 import lombok.Getter;
 
 @Getter
