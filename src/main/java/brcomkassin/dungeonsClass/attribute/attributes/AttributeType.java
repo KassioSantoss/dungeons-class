@@ -20,7 +20,7 @@ public enum AttributeType {
     MAX_HEALTH("max_health", AttributeCategory.DEFENSIVE, Attribute.GENERIC_MAX_HEALTH),
     ARMOR("armor", AttributeCategory.DEFENSIVE, Attribute.GENERIC_ARMOR),
     MAGIC_RESIST("magic_resist", AttributeCategory.DEFENSIVE, null),
-    DODGE_CHANCE("dodge_chance", AttributeCategory.DEFENSIVE, Attribute.GENERIC_LUCK), // Usamos sorte como proxy
+    DODGE_CHANCE("dodge_chance", AttributeCategory.DEFENSIVE, Attribute.GENERIC_LUCK),
 
     // Atributos de Utilidade
     COOLDOWN_REDUCTION("cooldown_reduction", AttributeCategory.UTILITY, null),

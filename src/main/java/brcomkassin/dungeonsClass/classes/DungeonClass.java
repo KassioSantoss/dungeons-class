@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 public class DungeonClass {
 
     private String name;
-    private final Map<AttributeCategory, Set<Attribute>> attributes = new HashMap<>();
+    private final Map<AttributeCategory, List<Attribute>> attributes = new HashMap<>();
 
     public void addAttribute(AttributeCategory attributeCategory, Attribute attribute) {
-        attributes.computeIfAbsent(attributeCategory, k -> new HashSet<>()).add(new Attribute(attribute.getName(), 1));
+        attributes.computeIfAbsent(attributeCategory, k -> new ArrayList<>()).add(new Attribute(attribute.getName(), 1));
     }
 
     public Attribute getAttribute(AttributeType type) {
-        Set<Attribute> list = attributes.get(type.getCategory());
+        List<Attribute> list = attributes.get(type.getCategory());
         if (list == null) return null;
 
         return list.stream()
@@ -33,10 +33,21 @@ public class DungeonClass {
 
     public Set<String> getAllAttributes() {
         Set<String> hashSet = new HashSet<>();
-        for (Map.Entry<AttributeCategory, Set<Attribute>> entry : attributes.entrySet()) {
+        for (Map.Entry<AttributeCategory, List<Attribute>> entry : attributes.entrySet()) {
             hashSet.addAll(entry.getValue().stream().map(Attribute::getName).collect(Collectors.toSet()));
         }
         return hashSet;
+    }
+
+    public Map<AttributeCategory, List<Attribute>> provideDefaultAttributes() {
+        Map<AttributeCategory, List<Attribute>> clonedAttributes = new HashMap<>();
+        for (Map.Entry<AttributeCategory, List<Attribute>> entry : this.attributes.entrySet()) {
+            List<Attribute> clonedList = entry.getValue().stream()
+                    .map(Attribute::clone)
+                    .collect(Collectors.toList());
+            clonedAttributes.put(entry.getKey(), clonedList);
+        }
+        return clonedAttributes;
     }
 
 }

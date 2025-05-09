@@ -1,31 +1,27 @@
 package brcomkassin.dungeonsClass.attribute.user;
 
-import brcomkassin.dungeonsClass.attribute.DungeonClassInMemory;
+import brcomkassin.dungeonsClass.attribute.attributes.Attribute;
 import brcomkassin.dungeonsClass.attribute.attributes.AttributeCategory;
 import brcomkassin.dungeonsClass.attribute.attributes.AttributeType;
-import brcomkassin.dungeonsClass.attribute.attributes.Attribute;
 import brcomkassin.dungeonsClass.classes.DungeonClass;
-import brcomkassin.dungeonsClass.utils.ColoredLogger;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Getter
 @Setter
 public class UserClass {
 
     private DungeonClass classe;
-    private Map<AttributeCategory, Set<Attribute>> currentAttributes;
+    private Map<AttributeCategory, List<Attribute>> currentAttributes;
 
     public UserClass(DungeonClass classe) {
         this.classe = classe;
-        currentAttributes = classe.getAttributes();
-        ColoredLogger.info("&e[Dungeon Class] Classe " + classe.getName() + " carregada.");
-        ColoredLogger.info("&e[Dungeon Class] Atributos: " + currentAttributes. values().stream().flatMap(Set::stream));
+        currentAttributes = classe.provideDefaultAttributes();
     }
 
     public Attribute getAttribute(AttributeType type) {
@@ -33,7 +29,7 @@ public class UserClass {
     }
 
     public List<Attribute> getAllAttributes() {
-        return currentAttributes.values().stream().flatMap(Set::stream).toList();
+        return currentAttributes.values().stream().flatMap(Collection::stream).toList();
     }
 
 }

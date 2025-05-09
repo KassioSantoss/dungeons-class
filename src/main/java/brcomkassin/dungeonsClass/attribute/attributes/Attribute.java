@@ -5,22 +5,31 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Attribute {
+public class Attribute implements Cloneable {
 
     private String name;
-    private float baseValue;
+    private float value;
 
-    public Attribute(String name, float baseValue) {
+    public Attribute(String name, float value) {
         this.name = name;
-        this.baseValue = baseValue;
+        this.value = value;
     }
 
     @Override
     public String toString() {
-        return name + "=" + baseValue;
+        return name + "=" + value;
     }
 
-    public float getBaseValue() {
-        return baseValue / 1000;
+    public float getAppliedValue() {
+        return value / 1000f;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
+    @Override
+    public Attribute clone() {
+        return new Attribute(this.name, this.value);
     }
 }

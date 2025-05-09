@@ -14,8 +14,6 @@ import java.util.Optional;
 @AllArgsConstructor(staticName = "of")
 public class AttributeController {
 
-    private static final DecimalFormat df = new DecimalFormat("0.00");
-
     public boolean applyAttributeModifier(Player player, AttributeType type, float bonusValue) {
         Optional<Attribute> optBukkitAttr = type.getBukkitAttribute();
         if (optBukkitAttr.isEmpty()) return false;
@@ -27,7 +25,6 @@ public class AttributeController {
 
         instance.setBaseValue(value);
 
-        ColoredLogger.info(df.format(instance.getValue()));
         return true;
     }
 

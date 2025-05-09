@@ -4,6 +4,7 @@ import brcomkassin.dungeonsClass.attribute.AttributeController;
 import brcomkassin.dungeonsClass.attribute.DungeonClassInMemory;
 import brcomkassin.dungeonsClass.attribute.attributes.Attribute;
 import brcomkassin.dungeonsClass.attribute.attributes.AttributeType;
+import brcomkassin.dungeonsClass.attribute.gui.AttributeGUI;
 import brcomkassin.dungeonsClass.attribute.user.UserClass;
 import brcomkassin.dungeonsClass.utils.Message;
 import org.bukkit.command.Command;
@@ -20,9 +21,12 @@ import java.util.List;
 public class DungeonClassCommand implements CommandExecutor, TabExecutor {
 
     private final DungeonClassInMemory dungeonClassInMemory;
+    private final AttributeGUI attributeGUI;
 
-    public DungeonClassCommand(DungeonClassInMemory dungeonClassInMemory) {
+
+    public DungeonClassCommand(DungeonClassInMemory dungeonClassInMemory, AttributeGUI attributeGUI) {
         this.dungeonClassInMemory = dungeonClassInMemory;
+        this.attributeGUI = attributeGUI;
     }
 
     @Override
@@ -64,11 +68,11 @@ public class DungeonClassCommand implements CommandExecutor, TabExecutor {
                             Message.Chat.send(player, "&4Atributo não encontrado na sua classe.");
                             return false;
                         }
-                        attribute.setBaseValue(value);
+                        attribute.setValue(value);
 
                         Message.Chat.send(player, "Mudando atributo para o jogador: " + player.getName());
 
-                        boolean modifier = AttributeController.of().applyAttributeModifier(player, type, attribute.getBaseValue());
+                        boolean modifier = AttributeController.of().applyAttributeModifier(player, type, attribute.getAppliedValue());
                         if (!modifier) {
                             Message.Chat.send(player, "&cAtributo: &6" + type.getKey() + " &a foi alterado para o valor:&6" + value);
                         }
@@ -78,9 +82,14 @@ public class DungeonClassCommand implements CommandExecutor, TabExecutor {
                     return true;
                 }
 
+                if (args.length >= 2 && args[1].equalsIgnoreCase("menu")) {
+                    attributeGUI.openInitialInventory(player);
+                    return true;
+                }
+
                 Message.Chat.send(player, "&aAtributos da sua classe: &6" + userClass.getClasse().getName());
                 for (Attribute attribute : userClass.getAllAttributes()) {
-                    Message.Chat.send(player, "&e" + attribute.getName() + ": &f" + attribute.getBaseValue());
+                    Message.Chat.send(player, "&e" + attribute.getName() + ": &f" + attribute.getValue());
                 }
                 return true;
             }
@@ -135,6 +144,7 @@ public class DungeonClassCommand implements CommandExecutor, TabExecutor {
                     completions.addAll(dungeonClassInMemory.getAllClassesName());
                 } else if (args[0].equalsIgnoreCase("atributos")) {
                     completions.add("add");
+                    completions.add("menu");
                 }
             }
             case 3 -> {
