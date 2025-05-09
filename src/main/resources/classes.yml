@@ -1,53 +1,57 @@
 classes:
-  Warrior:
+  warrior:
     attributes:
-      OFFENSIVE:
-        attackDamage: 60.0
-        critChance: 0.2
-        critMultiplier: 1.8
-      DEFENSIVE:
-        maxHealth: 150.0
+      offensive:
+        physical_damage: 60.0
+        critical_chance: 0.2
+        attack_speed: 1.5
+        armor_penetration: 10.0
+      defensive:
+        max_health: 150.0
         armor: 30.0
-        magicResist: 20.0
-        dodgeChance: 0.05
-      UTILITY:
-        cooldownReduction: 0.1
-        resourceGain: 0.1
-      MOBILITY:
-        moveSpeed: 0.2
-        jumpHeight: 1.0
-  Mage:
-    attributes:
-      OFFENSIVE:
-        attackDamage: 60.0
-        critChance: 0.2
-        critMultiplier: 1.8
-      DEFENSIVE:
-        maxHealth: 150.0
-        armor: 30.0
-        magicResist: 20.0
-        dodgeChance: 0.05
-      UTILITY:
-        cooldownReduction: 0.1
-        resourceGain: 0.1
-      MOBILITY:
-        moveSpeed: 0.2
-        jumpHeight: 1.0
-  Ranger:
-    attributes:
-      OFFENSIVE:
-        attackDamage: 60.0
-        critChance: 0.2
-        critMultiplier: 1.8
-      DEFENSIVE:
-        maxHealth: 150.0
-        armor: 30.0
-        magicResist: 20.0
-        dodgeChance: 0.05
-      UTILITY:
-        cooldownReduction: 0.1
-        resourceGain: 0.1
-      MOBILITY:
-        moveSpeed: 0.2
-        jumpHeight: 1.0
+        magic_resist: 20.0
+        dodge_chance: 0.05
+      utility:
+        cooldown_reduction: 0.1
+        resource_gain: 0.1
+      mobility:
+        move_speed: 0.2
+        jump_height: 1.0
 
+  mage:
+    attributes:
+      offensive:
+        physical_damage: 45.0
+        critical_chance: 0.25
+        attack_speed: 1.2
+        armor_penetration: 5.0
+      defensive:
+        max_health: 120.0
+        armor: 15.0
+        magic_resist: 35.0
+        dodge_chance: 0.03
+      utility:
+        cooldown_reduction: 0.2
+        resource_gain: 0.15
+      mobility:
+        move_speed: 0.25
+        jump_height: 1.2
+
+  ranger:
+    attributes:
+      offensive:
+        physical_damage: 50.0
+        critical_chance: 0.3
+        attack_speed: 1.8
+        armor_penetration: 15.0
+      defensive:
+        max_health: 130.0
+        armor: 20.0
+        magic_resist: 15.0
+        dodge_chance: 0.08
+      utility:
+        cooldown_reduction: 0.05
+        resource_gain: 0.1
+      mobility:
+        move_speed: 0.3
+        jump_height: 1.3

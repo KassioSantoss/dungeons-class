@@ -1,87 +1,70 @@
 package brcomkassin.dungeonsClass.classes.registry;
 
+import brcomkassin.dungeonsClass.attribute.AttributeController;
 import brcomkassin.dungeonsClass.attribute.DungeonClassInMemory;
-import brcomkassin.dungeonsClass.attribute.attributes.AttributeType;
 import brcomkassin.dungeonsClass.attribute.attributes.Attribute;
+import brcomkassin.dungeonsClass.attribute.attributes.AttributeCategory;
+import brcomkassin.dungeonsClass.attribute.attributes.AttributeType;
 import brcomkassin.dungeonsClass.classes.DungeonClass;
 import brcomkassin.dungeonsClass.utils.ColoredLogger;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.*;
+import java.util.List;
 
 public class DungeonClassLoaderImpl implements DungeonClassLoader {
 
     private final FileConfiguration config;
+    private final DungeonClassInMemory dungeonClassInMemory;
 
-    public DungeonClassLoaderImpl(FileConfiguration config) {
+    public DungeonClassLoaderImpl(FileConfiguration config, DungeonClassInMemory dungeonClassInMemory) {
         this.config = config;
+        this.dungeonClassInMemory = dungeonClassInMemory;
     }
 
     @Override
     public void loadClasses() {
-        ColoredLogger.info("&e[Dungeon Class] Carregando configurações das classes");
-
         ConfigurationSection classesSection = config.getConfigurationSection("classes");
         if (classesSection == null) {
-            ColoredLogger.info("&cConfiguração inválida! Seção 'classes' não encontrada.");
+            ColoredLogger.info("&4Seção 'classes' não encontrada no config.yml");
             return;
         }
 
-        int classesCount = classesSection.getKeys(false).size();
-
-        for (String className : classesSection.getKeys(false)) {
-            try {
-                ConfigurationSection attributesSection = classesSection.getConfigurationSection(className + ".attributes");
-                if (attributesSection == null) {
-                    ColoredLogger.info(String.format(
-                            "&cClasse '%s' não possui seção 'attributes'. Pulando...",
-                            className
-                    ));
-                    continue;
-                }
-
-                DungeonClass dungeonClass = new DungeonClass(className);
-
-                for (String attributeTypeStr : attributesSection.getKeys(false)) {
-                    try {
-                        AttributeType attributeType = AttributeType.valueOf(attributeTypeStr.toUpperCase());
-                        ConfigurationSection typeSection = attributesSection.getConfigurationSection(attributeTypeStr);
-
-                        if (typeSection == null) {
-                            ColoredLogger.info(String.format(
-                                    "&cTipo de atributo '%s' na classe '%s' não é uma seção válida. Pulando...",
-                                    attributeTypeStr, className
-                            ));
-                            continue;
-                        }
-
-                        Set<Attribute> attributes = new HashSet<>();
-
-                        for (String attributeKey : typeSection.getKeys(false)) {
-                            try {
-                                double value = typeSection.getDouble(attributeKey);
-                                Attribute attribute = new Attribute(attributeKey, value);
-                                attributes.add(attribute);
-                            } catch (Exception e) {
-                                ColoredLogger.info(String.format("&cValor inválido para atributo '%s.%s.%s'. Pulando...",
-                                        className, attributeTypeStr, attributeKey
-                                ));
-                            }
-                        }
-                        dungeonClass.addInitialAttributes(attributeType, attributes);
-                        DungeonClassInMemory.saveClass(dungeonClass);
-                    } catch (IllegalArgumentException e) {
-                        ColoredLogger.info(String.format("&cTipo de atributo '%s' na classe '%s' é inválido. Tipos válidos: %s",
-                                attributeTypeStr, className, Arrays.toString(AttributeType.values())
-                        ));
-                    }
-                }
-            } catch (Exception e) {
-                ColoredLogger.info(String.format("&cErro ao carregar classe '%s'. Motivo: %s", className, e.getMessage()
-                ));
+        classesSection.getKeys(false).forEach(className -> {
+            ConfigurationSection attributesSection = classesSection.getConfigurationSection(className + ".attributes");
+            if (attributesSection == null) {
+                ColoredLogger.info("&4Classe %s não possui seção 'attributes'".formatted(className));
+                return;
             }
-        }
-        ColoredLogger.info("&e[Dungeon Class] Configurações das classes carregadas com sucesso! " + classesCount + " classes carregadas.");
+
+            DungeonClass dungeonClass = new DungeonClass(className);
+            loadAttributes(dungeonClass, attributesSection);
+            dungeonClassInMemory.saveClass(dungeonClass);
+        });
+    }
+
+    private void loadAttributes(DungeonClass dungeonClass, ConfigurationSection attributesSection) {
+        attributesSection.getKeys(false).forEach(categoryName -> {
+            AttributeCategory category = AttributeCategory.fromString(categoryName);
+            if (category == null) {
+                ColoredLogger.info("&4Categoria desconhecida: %s".formatted(categoryName));
+                return;
+            }
+            ConfigurationSection categorySection = attributesSection.getConfigurationSection(categoryName);
+            if (categorySection == null) return;
+
+            categorySection.getKeys(false).forEach(attributeKey -> {
+                AttributeType type = AttributeType.fromKey(attributeKey);
+                if (type == null || type.getCategory() != category) {
+                    ColoredLogger.info("&4Atributo %s não pertence à categoria %s ou é inválido"
+                            .formatted(attributeKey, category));
+                    return;
+                }
+
+                float value = (float) categorySection.getDouble(attributeKey);
+                dungeonClass.addAttribute(category, new Attribute(attributeKey, value));
+                ColoredLogger.info("&aAtributo %s adicionado ao classe&6 %s".formatted(attributeKey, dungeonClass.getName()));
+            });
+        });
     }
 }
