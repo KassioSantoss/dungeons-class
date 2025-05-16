@@ -1,25 +1,25 @@
-package brcomkassin.dungeonsClass.classes.registry;
+package brcomkassin.dungeonsClass.registry;
 
-import brcomkassin.dungeonsClass.attribute.AttributeController;
-import brcomkassin.dungeonsClass.attribute.DungeonClassInMemory;
-import brcomkassin.dungeonsClass.attribute.attributes.Attribute;
-import brcomkassin.dungeonsClass.attribute.attributes.AttributeCategory;
-import brcomkassin.dungeonsClass.attribute.attributes.AttributeType;
-import brcomkassin.dungeonsClass.classes.DungeonClass;
+import brcomkassin.dungeonsClass.DungeonsClassPlugin;
+import brcomkassin.dungeonsClass.internal.DungeonClassProvider;
+import brcomkassin.dungeonsClass.attribute.Attribute;
+import brcomkassin.dungeonsClass.attribute.AttributeCategory;
+import brcomkassin.dungeonsClass.attribute.AttributeType;
+import brcomkassin.dungeonsClass.data.model.DungeonClass;
+import brcomkassin.dungeonsClass.internal.manager.DungeonClassManager;
 import brcomkassin.dungeonsClass.utils.ColoredLogger;
+import brcomkassin.dungeonsClass.utils.Config;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import java.util.List;
 
 public class DungeonClassLoaderImpl implements DungeonClassLoader {
 
     private final FileConfiguration config;
-    private final DungeonClassInMemory dungeonClassInMemory;
+    private final DungeonClassManager manager;
 
-    public DungeonClassLoaderImpl(FileConfiguration config, DungeonClassInMemory dungeonClassInMemory) {
-        this.config = config;
-        this.dungeonClassInMemory = dungeonClassInMemory;
+    public DungeonClassLoaderImpl(DungeonsClassPlugin plugin, DungeonClassProvider provider) {
+        this.config = new Config(plugin, "classes.yml");
+        this.manager = provider.getDungeonClassManager();
     }
 
     @Override
@@ -39,7 +39,7 @@ public class DungeonClassLoaderImpl implements DungeonClassLoader {
 
             DungeonClass dungeonClass = new DungeonClass(className);
             loadAttributes(dungeonClass, attributesSection);
-            dungeonClassInMemory.saveClass(dungeonClass);
+            manager.saveClass(dungeonClass);
         });
     }
 
@@ -61,8 +61,10 @@ public class DungeonClassLoaderImpl implements DungeonClassLoader {
                     return;
                 }
 
-                float value = (float) categorySection.getDouble(attributeKey);
-                dungeonClass.addAttribute(category, new Attribute(attributeKey, value));
+                int value = categorySection.getInt(attributeKey);
+                Attribute attribute = new Attribute(attributeKey, value);
+                attribute.setBaseValue(value);
+                dungeonClass.addAttribute(category, attribute);
                 ColoredLogger.info("&aAtributo %s adicionado ao classe&6 %s".formatted(attributeKey, dungeonClass.getName()));
             });
         });

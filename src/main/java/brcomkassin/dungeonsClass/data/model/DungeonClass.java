@@ -1,9 +1,9 @@
-package brcomkassin.dungeonsClass.classes;
+package brcomkassin.dungeonsClass.data.model;
 
 
-import brcomkassin.dungeonsClass.attribute.attributes.AttributeCategory;
-import brcomkassin.dungeonsClass.attribute.attributes.AttributeType;
-import brcomkassin.dungeonsClass.attribute.attributes.Attribute;
+import brcomkassin.dungeonsClass.attribute.AttributeCategory;
+import brcomkassin.dungeonsClass.attribute.AttributeType;
+import brcomkassin.dungeonsClass.attribute.Attribute;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

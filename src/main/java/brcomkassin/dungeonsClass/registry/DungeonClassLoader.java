@@ -1,4 +1,4 @@
-package brcomkassin.dungeonsClass.classes.registry;
+package brcomkassin.dungeonsClass.registry;
 
 public interface DungeonClassLoader {
 

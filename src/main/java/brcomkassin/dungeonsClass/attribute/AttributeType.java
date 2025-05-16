@@ -1,4 +1,4 @@
-package brcomkassin.dungeonsClass.attribute.attributes;
+package brcomkassin.dungeonsClass.attribute;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,8 +17,8 @@ public enum AttributeType {
     ARMOR_PENETRATION("armor_penetration", AttributeCategory.OFFENSIVE, null),
 
     // Atributos Defensivos
-    MAX_HEALTH("max_health", AttributeCategory.DEFENSIVE, Attribute.GENERIC_MAX_HEALTH),
-    ARMOR("armor", AttributeCategory.DEFENSIVE, Attribute.GENERIC_ARMOR),
+    MAX_HEALTH("max_health", AttributeCategory.DEFENSIVE, null),
+    RESISTANCE("resistance", AttributeCategory.DEFENSIVE, Attribute.GENERIC_ARMOR),
     MAGIC_RESIST("magic_resist", AttributeCategory.DEFENSIVE, null),
     DODGE_CHANCE("dodge_chance", AttributeCategory.DEFENSIVE, Attribute.GENERIC_LUCK),
 
@@ -27,8 +27,7 @@ public enum AttributeType {
     RESOURCE_GAIN("resource_gain", AttributeCategory.UTILITY, null),
 
     // Atributos de Mobilidade
-    MOVE_SPEED("move_speed", AttributeCategory.MOBILITY, Attribute.GENERIC_MOVEMENT_SPEED),
-    JUMP_HEIGHT("jump_height", AttributeCategory.MOBILITY, null);
+    MOVE_SPEED("move_speed", AttributeCategory.MOBILITY, Attribute.GENERIC_MOVEMENT_SPEED);
 
     private final String key;
     private final AttributeCategory category;
@@ -60,6 +59,7 @@ public enum AttributeType {
                 .map(AttributeType::getKey)
                 .toList();
     }
+
 }
 
 

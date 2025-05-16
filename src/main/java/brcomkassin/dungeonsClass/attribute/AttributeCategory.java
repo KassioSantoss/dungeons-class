@@ -1,4 +1,4 @@
-package brcomkassin.dungeonsClass.attribute.attributes;
+package brcomkassin.dungeonsClass.attribute;
 
 import org.bukkit.ChatColor;
 

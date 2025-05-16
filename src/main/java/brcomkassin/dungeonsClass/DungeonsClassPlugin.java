@@ -4,11 +4,13 @@ import brcomkassin.dungeonsClass.initializer.DungeonClassInitializer;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@Getter
 public final class DungeonsClassPlugin extends JavaPlugin {
 
     @Getter
     private static DungeonsClassPlugin instance;
-    private final DungeonClassInitializer dungeonClassInitializer = new DungeonClassInitializer(this);
+    private DungeonClassInitializer dungeonClassInitializer;
+    private DungeonClassAPI api;
 
     @Override
     public void onLoad() {
@@ -17,12 +19,18 @@ public final class DungeonsClassPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        dungeonClassInitializer.onEnable();
+        api = new DungeonClassAPI(this);
+        dungeonClassInitializer = new DungeonClassInitializer(instance);
+        dungeonClassInitializer.onEnable(); // aqui.
     }
 
     @Override
     public void onDisable() {
         dungeonClassInitializer.onDisable();
+    }
+
+    public DungeonClassAPI getAPI() {
+        return api;
     }
 
 }

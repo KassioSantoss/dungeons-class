@@ -39,6 +39,11 @@ public class ColoredLogger {
          Bukkit.getLogger().info(coloredMessage);
     }
 
+    public static void error(String message) {
+        String coloredMessage = "\u001B[31m" + translateColorCodes(message) + "\u001B[0m";
+        Bukkit.getLogger().info(coloredMessage);
+    }
+
     private static String translateColorCodes(String message) {
         StringBuilder result = new StringBuilder();
         char[] chars = message.toCharArray();

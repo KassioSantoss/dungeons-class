@@ -1,14 +1,13 @@
-package brcomkassin.dungeonsClass.attribute;
+package brcomkassin.dungeonsClass.data.cache;
 
-import brcomkassin.dungeonsClass.attribute.user.UserClass;
-import brcomkassin.dungeonsClass.classes.DungeonClass;
-
+import brcomkassin.dungeonsClass.data.model.DungeonClass;
+import brcomkassin.dungeonsClass.data.model.MemberClass;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class DungeonClassInMemory {
 
-    private final Map<UUID, UserClass> userClassMap = new HashMap<>();
+    private final Map<String, MemberClass> userClassMap = new HashMap<>();
     private final Set<DungeonClass> classMap = new HashSet<>();
 
     public void saveClass(DungeonClass dungeonClass) {
@@ -31,19 +30,19 @@ public class DungeonClassInMemory {
         return classMap.stream().map(DungeonClass::getName).collect(Collectors.toSet());
     }
 
-    public void addUserClass(UUID uuid, UserClass userClass) {
+    public void registerMemberClass(String uuid, MemberClass userClass) {
         userClassMap.put(uuid, userClass);
     }
 
-    public UserClass getUserClass(UUID uuid) {
+    public MemberClass getMemberClass(String uuid) {
         return userClassMap.get(uuid);
     }
 
-    public boolean hasUserClass(UUID uuid) {
+    public boolean hasMemberClass(String uuid) {
         return userClassMap.containsKey(uuid);
     }
 
-    public void removeUserClass(UUID uuid) {
+    public void unregisterMemberClass(String uuid) {
         userClassMap.remove(uuid);
     }
 
