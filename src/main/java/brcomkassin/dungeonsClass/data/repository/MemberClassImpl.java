@@ -14,6 +14,7 @@ public class MemberClassImpl extends MemberClassRepository {
 
     public MemberClassImpl(HikariDataSource source) {
         super(source);
+        init();
     }
 
     @Override
@@ -37,11 +38,11 @@ public class MemberClassImpl extends MemberClassRepository {
              var statement = connection.prepareStatement(
                      "REPLACE INTO member_class (id, data) VALUES (?, ?)"
              )) {
-            statement.setString(1, memberClass.getClasse().getName());
+            statement.setString(1, memberClass.getId());
             statement.setString(2, json);
             statement.executeUpdate();
         } catch (SQLException e) {
-            ColoredLogger.error("Erro ao salvar member class: " + memberClass.getClasse().getName());
+            ColoredLogger.error("Erro ao salvar membro na class: " + memberClass.getClasse().getName());
         }
     }
 
@@ -77,10 +78,10 @@ public class MemberClassImpl extends MemberClassRepository {
              var statement = connection.prepareStatement(
                      "DELETE FROM member_class WHERE id = ?"
              )) {
-            statement.setString(1, member.getClasse().getName());
+            statement.setString(1, member.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            ColoredLogger.error("Erro ao remover member class: " + member.getClasse().getName());
+            ColoredLogger.error("Erro ao remover membro da class: " + member.getClasse().getName());
         }
     }
 }

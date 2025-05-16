@@ -4,48 +4,41 @@ package brcomkassin.dungeonsClass.data.model;
 import brcomkassin.dungeonsClass.attribute.AttributeCategory;
 import brcomkassin.dungeonsClass.attribute.AttributeType;
 import brcomkassin.dungeonsClass.attribute.Attribute;
+import brcomkassin.dungeonsClass.attribute.PlayerAttributes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
 public class DungeonClass {
 
     private String name;
-    private final Map<AttributeCategory, List<Attribute>> attributes = new HashMap<>();
+    private final Map<AttributeCategory, PlayerAttributes> attributes = new HashMap<>();
 
-    public void addAttribute(AttributeCategory attributeCategory, Attribute attribute) {
-        attributes.computeIfAbsent(attributeCategory, k -> new ArrayList<>()).add(new Attribute(attribute.getName(), 1));
+    public void addAttribute(AttributeCategory attributeCategory, PlayerAttributes playerAttributes) {
+        attributes.compute(attributeCategory, (key, value) -> playerAttributes);
     }
 
     public Attribute getAttribute(AttributeType type) {
-        List<Attribute> list = attributes.get(type.getCategory());
-        if (list == null) return null;
-
-        return list.stream()
-                .filter(a -> a.getName().equalsIgnoreCase(type.getKey()))
-                .findFirst()
-                .orElse(null);
+        PlayerAttributes playerAttributes = attributes.get(type.getCategory());
+        if (playerAttributes == null) return null;
+        return playerAttributes.getAttribute(type);
     }
 
-    public Set<String> getAllAttributes() {
-        Set<String> hashSet = new HashSet<>();
-        for (Map.Entry<AttributeCategory, List<Attribute>> entry : attributes.entrySet()) {
-            hashSet.addAll(entry.getValue().stream().map(Attribute::getName).collect(Collectors.toSet()));
-        }
-        return hashSet;
+    public List<String> getAllAttributes() {
+        return AttributeType.getAllKeys();
     }
 
-    public Map<AttributeCategory, List<Attribute>> provideDefaultAttributes() {
-        Map<AttributeCategory, List<Attribute>> clonedAttributes = new HashMap<>();
-        for (Map.Entry<AttributeCategory, List<Attribute>> entry : this.attributes.entrySet()) {
-            List<Attribute> clonedList = entry.getValue().stream()
-                    .map(Attribute::clone)
-                    .collect(Collectors.toList());
-            clonedAttributes.put(entry.getKey(), clonedList);
+    public Map<AttributeCategory, PlayerAttributes> provideDefaultAttributes() {
+        Map<AttributeCategory, PlayerAttributes> clonedAttributes = new HashMap<>();
+        for (Map.Entry<AttributeCategory, PlayerAttributes> entry : this.attributes.entrySet()) {
+            PlayerAttributes original = entry.getValue();
+            PlayerAttributes clone = new PlayerAttributes();
+            for (Map.Entry<AttributeType, Attribute> attrEntry : original.getAttributes().entrySet()) {
+                clone.addAttribute(attrEntry.getKey(), attrEntry.getValue().clone());
+            }
+            clonedAttributes.put(entry.getKey(), clone);
         }
         return clonedAttributes;
     }

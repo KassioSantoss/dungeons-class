@@ -1,7 +1,7 @@
 package brcomkassin.dungeonsClass.data.service;
 
+import brcomkassin.dungeonsClass.builder.MemberClassBuilder;
 import brcomkassin.dungeonsClass.data.cache.DungeonClassInMemory;
-import brcomkassin.dungeonsClass.data.model.DungeonClass;
 import brcomkassin.dungeonsClass.data.model.MemberClass;
 import brcomkassin.dungeonsClass.data.repository.MemberClassRepository;
 import brcomkassin.dungeonsClass.utils.ColoredLogger;
@@ -37,6 +37,18 @@ public class MemberClassService {
         }
         ColoredLogger.info("Buscando member class: " + uuid.toString() + " no banco de dados.");
         return memberClassRepository.find(uuid.toString());
+    }
+
+    public void createMemberClass(UUID uuid) {
+        Optional<MemberClass> optional = findById(uuid);
+
+        if (optional.isEmpty()) return;
+        MemberClass memberClass = optional.get();
+
+        MemberClassBuilder.of(UUID.fromString(memberClass.getId()), memberClass.getClasse())
+                .attributePoints(memberClass.getAttributePoints())
+                .currentAttributes(memberClass.getCurrentAttributes())
+                .build();
     }
 
 }

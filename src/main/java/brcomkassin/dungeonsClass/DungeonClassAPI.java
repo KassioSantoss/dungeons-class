@@ -16,25 +16,28 @@ import brcomkassin.dungeonsClass.internal.manager.PlayerClassManager;
  */
 public class DungeonClassAPI {
     private final DungeonClassProvider provider;
-    private final DungeonsClassPlugin plugin;
+    private static DungeonClassAPI INSTANCE;
 
     /**
      * Construtor privado para garantir o padrão Singleton.
      * Inicializa o provedor de serviços.
      */
-    public DungeonClassAPI(DungeonsClassPlugin plugin) {
-        this.plugin = plugin;
-        provider = new DungeonClassProvider(plugin);
+    private DungeonClassAPI(DungeonClassProvider provider) {
+        this.provider = provider;
     }
 
     /**
      * Obtém a instância única da API.
      * Uso: DungeonClassAPI.get().métodoDesejado()
-     *
-     * @return Instância única da DungeonClassAPI
      */
-    public DungeonClassAPI get() {
-        return new DungeonClassAPI(plugin);
+    public static void create(DungeonClassProvider provider) {
+        if (INSTANCE == null) {
+            INSTANCE = new DungeonClassAPI(provider);
+        }
+    }
+
+    public static DungeonClassAPI get() {
+        return INSTANCE;
     }
 
     /**

@@ -3,21 +3,19 @@ package brcomkassin.dungeonsClass.data.model;
 import brcomkassin.dungeonsClass.attribute.Attribute;
 import brcomkassin.dungeonsClass.attribute.AttributeCategory;
 import brcomkassin.dungeonsClass.attribute.AttributeType;
+import brcomkassin.dungeonsClass.attribute.PlayerAttributes;
 import brcomkassin.dungeonsClass.data.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
 public class MemberClass extends Entity<String> {
 
     private DungeonClass classe;
-    private Map<AttributeCategory, List<Attribute>> currentAttributes;
+    private Map<AttributeCategory, PlayerAttributes> currentAttributes;
     private int attributePoints = 0;
     private final String id;
 
@@ -27,12 +25,16 @@ public class MemberClass extends Entity<String> {
         currentAttributes = classe.provideDefaultAttributes();
     }
 
+    public void setCurrentAttributes(Map<AttributeCategory, PlayerAttributes> attributes) {
+        this.currentAttributes = new EnumMap<>(attributes);
+    }
+
     public Attribute getAttribute(AttributeType type) {
-        return currentAttributes.get(type.getCategory()).stream().filter(a -> a.getName().equals(type.getKey())).findFirst().orElse(null);
+        return currentAttributes.get(type.getCategory()).getAttribute(type);
     }
 
     public List<Attribute> getAllAttributes() {
-        return currentAttributes.values().stream().flatMap(Collection::stream).toList();
+        return currentAttributes.values().stream().flatMap(attributes -> attributes.getAttributes().values().stream()).toList();
     }
 
     public int getAttributePoints() {

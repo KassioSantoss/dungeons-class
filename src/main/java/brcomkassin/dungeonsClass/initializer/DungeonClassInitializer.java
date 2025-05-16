@@ -1,8 +1,8 @@
 package brcomkassin.dungeonsClass.initializer;
 
+import brcomkassin.dungeonsClass.DungeonClassAPI;
 import brcomkassin.dungeonsClass.commands.DungeonClassCommand;
 import brcomkassin.dungeonsClass.DungeonsClassPlugin;
-import brcomkassin.dungeonsClass.DungeonClassAPI;
 import brcomkassin.dungeonsClass.data.cache.DungeonClassInMemory;
 import brcomkassin.dungeonsClass.data.service.MemberClassService;
 import brcomkassin.dungeonsClass.data.DatabaseSource;
@@ -14,7 +14,14 @@ import brcomkassin.dungeonsClass.listener.AttributeGUIListener;
 import brcomkassin.dungeonsClass.registry.DungeonClassLoader;
 import brcomkassin.dungeonsClass.registry.DungeonClassLoaderImpl;
 import brcomkassin.dungeonsClass.runnable.DungeonClassRunnable;
+import brcomkassin.dungeonsClass.utils.Config;
+import brcomkassin.dungeonsClass.utils.ConfigManager;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class DungeonClassInitializer {
@@ -25,10 +32,9 @@ public class DungeonClassInitializer {
     private final DungeonClassRunnable runnable;
     private final MemberClassService memberClassService;
 
-    public DungeonClassInitializer(DungeonsClassPlugin plugin) {
+    private DungeonClassInitializer(DungeonsClassPlugin plugin) {
         this.plugin = plugin;
 
-        final DungeonClassAPI api = plugin.getAPI();
         final DatabaseSource databaseSource = DatabaseSource.create();
         final MemberClassRepository repository = new MemberClassImpl(databaseSource.getSource());
         final DungeonClassInMemory dungeonClassInMemory = new DungeonClassInMemory();
@@ -36,18 +42,25 @@ public class DungeonClassInitializer {
         this.memberClassService = new MemberClassService(repository, dungeonClassInMemory);
         runnable = new DungeonClassRunnable(memberClassService);
 
-        this.provider = api.getProvider();
+        this.provider = new DungeonClassProvider(memberClassService, dungeonClassInMemory);
+        DungeonClassAPI.create(provider);
         this.classLoader = new DungeonClassLoaderImpl(plugin, provider);
     }
 
-    public void onEnable() {
+    public static DungeonClassInitializer of(DungeonsClassPlugin plugin) {
+        return new DungeonClassInitializer(plugin);
+    }
+
+    public void enable() {
         classLoader.loadClasses();
         registerCommands();
         registerEvents();
         runnable.run();
+        Bukkit.getOnlinePlayers().forEach(player -> memberClassService.findById(player.getUniqueId()));
     }
 
-    public void onDisable() {
+    public void disable() {
+        ConfigManager.getFiles().forEach(Config::saveConfig);
     }
 
     private void registerCommands() {

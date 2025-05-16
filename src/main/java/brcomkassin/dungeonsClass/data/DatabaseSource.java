@@ -2,6 +2,7 @@ package brcomkassin.dungeonsClass.data;
 
 import brcomkassin.dungeonsClass.DungeonsClassPlugin;
 import brcomkassin.dungeonsClass.utils.Config;
+import brcomkassin.dungeonsClass.utils.ConfigManager;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,6 +26,7 @@ public record DatabaseSource(
 
     public static DatabaseSource create() {
         Config config = new Config(DungeonsClassPlugin.getInstance(), "database.yml");
+        ConfigManager.add(config);
         ConfigurationSection section =
                 Objects.requireNonNull(config.getConfigurationSection("MySQL"), "MySQL section not found");
 

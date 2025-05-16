@@ -89,7 +89,7 @@ public class DungeonClassCommand implements CommandExecutor, TabExecutor {
                         }
                     }
 
-                    if (!playerClassManager.hasClass(target)) {
+                    if (service.findById(target.getUniqueId()).isEmpty()) {
                         Message.Chat.send(player, "&4O jogador não possui uma classe.");
                         return false;
                     }
@@ -98,9 +98,11 @@ public class DungeonClassCommand implements CommandExecutor, TabExecutor {
 
                     if (action.equals("add")) {
                         targetClass.addAttributePoints(amount);
+                        service.save(targetClass);
                         Message.Chat.send(player, "&aAdicionado &e" + amount + " &aponto(s) ao jogador &e" + target.getName());
                     } else if (action.equals("set")) {
                         targetClass.setAttributePoints(amount);
+                        service.save(targetClass);
                         Message.Chat.send(player, "&aSetado para &e" + amount + " &aponto(s) o jogador &e" + target.getName());
                     }
 

@@ -27,6 +27,7 @@ public class DungeonClassEvents implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        service.createMemberClass(event.getPlayer().getUniqueId());
         Player player = event.getPlayer();
         AttributeInstance attribute = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH);
         if (attribute == null) return;

@@ -17,8 +17,8 @@ public class DungeonClassProvider {
     private final AttributeGUI attributeGUI;
     private final MemberClassService memberClassService;
 
-    public DungeonClassProvider(DungeonsClassPlugin plugin) {
-        this.memberClassService = plugin.getDungeonClassInitializer().getMemberClassService();
+    public DungeonClassProvider(MemberClassService memberClassService, DungeonClassInMemory dungeonClassInMemory) {
+        this.memberClassService = memberClassService;
         this.dungeonClassInMemory = new DungeonClassInMemory();
         this.playerClassManager = new PlayerClassManager(memberClassService);
         this.playerAttributeManager = new PlayerAttributeManager(memberClassService);

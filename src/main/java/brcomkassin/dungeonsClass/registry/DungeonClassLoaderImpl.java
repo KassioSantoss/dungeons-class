@@ -1,6 +1,7 @@
 package brcomkassin.dungeonsClass.registry;
 
 import brcomkassin.dungeonsClass.DungeonsClassPlugin;
+import brcomkassin.dungeonsClass.attribute.PlayerAttributes;
 import brcomkassin.dungeonsClass.internal.DungeonClassProvider;
 import brcomkassin.dungeonsClass.attribute.Attribute;
 import brcomkassin.dungeonsClass.attribute.AttributeCategory;
@@ -53,6 +54,8 @@ public class DungeonClassLoaderImpl implements DungeonClassLoader {
             ConfigurationSection categorySection = attributesSection.getConfigurationSection(categoryName);
             if (categorySection == null) return;
 
+            PlayerAttributes playerAttributes = new PlayerAttributes();
+
             categorySection.getKeys(false).forEach(attributeKey -> {
                 AttributeType type = AttributeType.fromKey(attributeKey);
                 if (type == null || type.getCategory() != category) {
@@ -62,11 +65,15 @@ public class DungeonClassLoaderImpl implements DungeonClassLoader {
                 }
 
                 int value = categorySection.getInt(attributeKey);
+
                 Attribute attribute = new Attribute(attributeKey, value);
                 attribute.setBaseValue(value);
-                dungeonClass.addAttribute(category, attribute);
+
+                playerAttributes.addAttribute(type, attribute);
+
                 ColoredLogger.info("&aAtributo %s adicionado ao classe&6 %s".formatted(attributeKey, dungeonClass.getName()));
             });
+            dungeonClass.addAttribute(category, playerAttributes);
         });
     }
 }
