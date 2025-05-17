@@ -5,11 +5,15 @@ import brcomkassin.dungeonsClass.data.service.MemberClassService;
 import brcomkassin.dungeonsClass.attribute.Attribute;
 import brcomkassin.dungeonsClass.attribute.AttributeType;
 import brcomkassin.dungeonsClass.data.model.MemberClass;
+import brcomkassin.dungeonsClass.utils.ColoredLogger;
 import brcomkassin.dungeonsClass.utils.Message;
+import com.google.gson.Gson;
+import io.papermc.paper.plugin.provider.classloader.ConfiguredPluginClassLoader;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class PlayerAttributeManager {
 
@@ -20,8 +24,10 @@ public class PlayerAttributeManager {
     }
 
     public void increaseBaseValue(Player player, AttributeType type, double amount) {
-        MemberClass memberClass = service.findById(player.getUniqueId()).orElse(null);
-        if (memberClass == null) return;
+        Optional<MemberClass> optional = service.findById(player.getUniqueId());
+        if (optional.isEmpty()) return;
+
+        MemberClass memberClass = optional.get();
 
         Attribute attribute = memberClass.getAttribute(type);
         if (attribute == null) return;

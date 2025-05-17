@@ -1,9 +1,11 @@
 package brcomkassin.dungeonsClass.attribute;
 
+import brcomkassin.dungeonsClass.utils.cloneable.DeepCloneable;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerAttributes {
+public class PlayerAttributes implements Cloneable {
 
     private final Map<AttributeType, Attribute> attributes = new HashMap<>();
 
@@ -17,6 +19,15 @@ public class PlayerAttributes {
 
     public Map<AttributeType, Attribute> getAttributes() {
         return attributes;
+    }
+
+    @Override
+    public PlayerAttributes clone() {
+        PlayerAttributes clone = new PlayerAttributes();
+        for (Map.Entry<AttributeType, Attribute> entry : attributes.entrySet()) {
+            clone.addAttribute(entry.getKey(), entry.getValue().clone());
+        }
+        return clone;
     }
 
 }

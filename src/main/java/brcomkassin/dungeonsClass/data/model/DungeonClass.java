@@ -31,16 +31,16 @@ public class DungeonClass {
     }
 
     public Map<AttributeCategory, PlayerAttributes> provideDefaultAttributes() {
-        Map<AttributeCategory, PlayerAttributes> clonedAttributes = new HashMap<>();
-        for (Map.Entry<AttributeCategory, PlayerAttributes> entry : this.attributes.entrySet()) {
-            PlayerAttributes original = entry.getValue();
-            PlayerAttributes clone = new PlayerAttributes();
-            for (Map.Entry<AttributeType, Attribute> attrEntry : original.getAttributes().entrySet()) {
-                clone.addAttribute(attrEntry.getKey(), attrEntry.getValue().clone());
+        Map<AttributeCategory, PlayerAttributes> clonedAttributes = new EnumMap<>(AttributeCategory.class);
+        for (Map.Entry<AttributeCategory, PlayerAttributes> entry : attributes.entrySet()) {
+            PlayerAttributes cloned = new PlayerAttributes();
+            for (var e : entry.getValue().getAttributes().entrySet()) {
+                cloned.addAttribute(e.getKey(), e.getValue().clone());
             }
-            clonedAttributes.put(entry.getKey(), clone);
+            clonedAttributes.put(entry.getKey(), cloned);
         }
         return clonedAttributes;
     }
+
 
 }

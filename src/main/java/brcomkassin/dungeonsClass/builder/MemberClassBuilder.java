@@ -44,8 +44,7 @@ public class MemberClassBuilder {
         if (uuid == null || classe == null) {
             return null;
         }
-
-        MemberClass member = new MemberClass(uuid, classe);
+        MemberClass member = new MemberClass(uuid, classe.getName());
         member.setAttributePoints(this.attributePoints);
 
         Map<AttributeCategory, PlayerAttributes> copy = new EnumMap<>(AttributeCategory.class);

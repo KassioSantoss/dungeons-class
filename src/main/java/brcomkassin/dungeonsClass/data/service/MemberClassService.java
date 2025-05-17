@@ -5,7 +5,6 @@ import brcomkassin.dungeonsClass.data.cache.DungeonClassInMemory;
 import brcomkassin.dungeonsClass.data.model.MemberClass;
 import brcomkassin.dungeonsClass.data.repository.MemberClassRepository;
 import brcomkassin.dungeonsClass.utils.ColoredLogger;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,8 +21,6 @@ public class MemberClassService {
     public void save(MemberClass memberClass) {
         memberClassRepository.merge(memberClass);
         dungeonClassInMemory.registerMemberClass(memberClass.getId(), memberClass);
-        ColoredLogger.info("Salvando member class: " + memberClass.getId());
-        ColoredLogger.info("Atributos: " + memberClass.getAllAttributes());
     }
 
     public void remove(MemberClass memberClass) {
@@ -35,8 +32,9 @@ public class MemberClassService {
         if (dungeonClassInMemory.getMemberClass(uuid.toString()) != null) {
             return Optional.of(dungeonClassInMemory.getMemberClass(uuid.toString()));
         }
-        ColoredLogger.info("Buscando member class: " + uuid.toString() + " no banco de dados.");
-        return memberClassRepository.find(uuid.toString());
+        Optional<MemberClass> optional = memberClassRepository.find(uuid.toString());
+        optional.ifPresent(memberClass -> dungeonClassInMemory.registerMemberClass(memberClass.getId(), memberClass));
+        return optional;
     }
 
     public void createMemberClass(UUID uuid) {
@@ -44,8 +42,7 @@ public class MemberClassService {
 
         if (optional.isEmpty()) return;
         MemberClass memberClass = optional.get();
-
-        MemberClassBuilder.of(UUID.fromString(memberClass.getId()), memberClass.getClasse())
+        MemberClassBuilder.of(UUID.fromString(memberClass.getId()), memberClass.getDungeonClass())
                 .attributePoints(memberClass.getAttributePoints())
                 .currentAttributes(memberClass.getCurrentAttributes())
                 .build();

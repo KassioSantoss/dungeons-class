@@ -21,7 +21,6 @@ public class AttributeController {
         double value = getDefaultBaseValue(instance.getAttribute()) + bonusValue;
 
         instance.setBaseValue(value);
-
         return true;
     }
 

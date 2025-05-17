@@ -34,15 +34,16 @@ public class MemberClassImpl extends MemberClassRepository {
     @Override
     public void merge(MemberClass memberClass) {
         String json = gson.toJson(memberClass);
+
         try (var connection = source.getConnection();
              var statement = connection.prepareStatement(
-                     "REPLACE INTO member_class (id, data) VALUES (?, ?)"
+                     "INSERT INTO member_class (`id`, `data`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `data` = VALUES(`data`);"
              )) {
             statement.setString(1, memberClass.getId());
             statement.setString(2, json);
             statement.executeUpdate();
         } catch (SQLException e) {
-            ColoredLogger.error("Erro ao salvar membro na class: " + memberClass.getClasse().getName());
+            ColoredLogger.error("Erro ao salvar membro na class: " + memberClass.getDungeonClass().getName());
         }
     }
 
@@ -62,7 +63,6 @@ public class MemberClassImpl extends MemberClassRepository {
                         ColoredLogger.error("Erro ao buscar member class: " + id);
                         return Optional.empty();
                     }
-                    ColoredLogger.info("Member class encontrada com sucesso!");
                     return Optional.of(memberClass);
                 }
             }
@@ -81,7 +81,7 @@ public class MemberClassImpl extends MemberClassRepository {
             statement.setString(1, member.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            ColoredLogger.error("Erro ao remover membro da class: " + member.getClasse().getName());
+            ColoredLogger.error("Erro ao remover membro da class: " + member.getDungeonClass().getName());
         }
     }
 }

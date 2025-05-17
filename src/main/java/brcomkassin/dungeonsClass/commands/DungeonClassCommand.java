@@ -172,7 +172,7 @@ public class DungeonClassCommand implements CommandExecutor, TabExecutor {
                     return true;
                 }
 
-                Message.Chat.send(player, "&aAtributos da sua classe: &6" + memberClass.getClasse().getName());
+                Message.Chat.send(player, "&aAtributos da sua classe: &6" + memberClass.getDungeonClass().getName());
                 for (Attribute attribute : memberClass.getAllAttributes()) {
                     Message.Chat.send(player, "&e" + attribute.getName() + ": &6" + DecimalFormatUtil.format(attribute.getCurrentValue())
                             + " &a| " + DecimalFormatUtil.format(attribute.getBaseValue()));
@@ -196,7 +196,7 @@ public class DungeonClassCommand implements CommandExecutor, TabExecutor {
                     return false;
                 }
 
-                MemberClass memberClass = new MemberClass(player.getUniqueId(), classManager.getClass(args[1]));
+                MemberClass memberClass = new MemberClass(player.getUniqueId(), args[1]);
                 service.save(memberClass);
                 Message.Chat.send(player, "&aVocê entrou na classe: &6" + args[1]);
                 return true;
