@@ -7,6 +7,7 @@ import brcomkassin.dungeonsClass.attribute.Attribute;
 import brcomkassin.dungeonsClass.attribute.PlayerAttributes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
 import java.util.*;
 
 @Getter
@@ -33,14 +34,9 @@ public class DungeonClass {
     public Map<AttributeCategory, PlayerAttributes> provideDefaultAttributes() {
         Map<AttributeCategory, PlayerAttributes> clonedAttributes = new EnumMap<>(AttributeCategory.class);
         for (Map.Entry<AttributeCategory, PlayerAttributes> entry : attributes.entrySet()) {
-            PlayerAttributes cloned = new PlayerAttributes();
-            for (var e : entry.getValue().getAttributes().entrySet()) {
-                cloned.addAttribute(e.getKey(), e.getValue().clone());
-            }
-            clonedAttributes.put(entry.getKey(), cloned);
+            clonedAttributes.put(entry.getKey(), entry.getValue().clone());
         }
         return clonedAttributes;
     }
-
 
 }

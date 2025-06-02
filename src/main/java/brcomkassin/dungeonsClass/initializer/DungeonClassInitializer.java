@@ -1,6 +1,6 @@
 package brcomkassin.dungeonsClass.initializer;
 
-import brcomkassin.dungeonsClass.DungeonClassAPI;
+import brcomkassin.dungeonsClass.api.DungeonClassAPI;
 import brcomkassin.dungeonsClass.commands.DungeonClassCommand;
 import brcomkassin.dungeonsClass.DungeonsClassPlugin;
 import brcomkassin.dungeonsClass.data.cache.DungeonClassInMemory;
@@ -18,10 +18,6 @@ import brcomkassin.dungeonsClass.utils.Config;
 import brcomkassin.dungeonsClass.utils.ConfigManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class DungeonClassInitializer {

@@ -4,7 +4,6 @@ import brcomkassin.dungeonsClass.builder.MemberClassBuilder;
 import brcomkassin.dungeonsClass.data.cache.DungeonClassInMemory;
 import brcomkassin.dungeonsClass.data.model.MemberClass;
 import brcomkassin.dungeonsClass.data.repository.MemberClassRepository;
-import brcomkassin.dungeonsClass.utils.ColoredLogger;
 import java.util.Optional;
 import java.util.UUID;
 

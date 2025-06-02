@@ -58,7 +58,7 @@ public class Attribute implements Cloneable {
     @Override
     public Attribute clone() {
         Attribute clone = new Attribute(this.name, this.baseValue);
-        clone.setCurrentValue((double) this.currentValue);
+        clone.setCurrentValue(this.currentValue);
         return clone;
     }
 }

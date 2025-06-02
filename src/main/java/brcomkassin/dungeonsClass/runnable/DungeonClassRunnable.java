@@ -3,46 +3,70 @@ package brcomkassin.dungeonsClass.runnable;
 import brcomkassin.dungeonsClass.DungeonsClassPlugin;
 import brcomkassin.dungeonsClass.attribute.Attribute;
 import brcomkassin.dungeonsClass.attribute.AttributeType;
+import brcomkassin.dungeonsClass.attribute.regeneration.ExponentialRegenerationStrategy;
+import brcomkassin.dungeonsClass.attribute.regeneration.RegenerationEngine;
 import brcomkassin.dungeonsClass.data.model.MemberClass;
-import brcomkassin.dungeonsClass.data.repository.MemberClassRepository;
 import brcomkassin.dungeonsClass.data.service.MemberClassService;
 import brcomkassin.dungeonsClass.utils.DecimalFormatUtil;
 import brcomkassin.dungeonsClass.utils.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
 import java.util.Optional;
 import java.util.UUID;
 
 public class DungeonClassRunnable {
 
     private final MemberClassService service;
+    private final RegenerationEngine regenEngine;
 
     public DungeonClassRunnable(MemberClassService service) {
         this.service = service;
+
+        this.regenEngine = new RegenerationEngine(
+                new ExponentialRegenerationStrategy(
+                        0.5,
+                        2,
+                        30.0,
+                        5.0
+                ));
     }
 
     public void run() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(DungeonsClassPlugin.getInstance(), () -> {
-            for (UUID uuid : Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).toList()) {
-                Player player = Bukkit.getPlayer(uuid);
-                if (player == null || !player.isOnline()) continue;
+        Bukkit.getScheduler().runTaskTimerAsynchronously(
+                DungeonsClassPlugin.getInstance(), () -> {
 
-                if (DungeonClassHurtPlayers.hasPlayer(uuid)) continue;
+                    for (Player player : Bukkit.getOnlinePlayers()) {
 
-                Optional<MemberClass> memberClass = service.findById(uuid);
-                if (memberClass.isEmpty()) continue;
+                        UUID uuid = player.getUniqueId();
 
-                Attribute health = memberClass.get().getAttribute(AttributeType.MAX_HEALTH);
+                        if (DungeonClassHurtPlayers.hasPlayer(uuid)) continue;
 
-                if (health != null && health.getCurrentValue() < health.getBaseValue()) {
-                    health.setCurrentValue(Math.min(health.getCurrentValue() + 1, health.getBaseValue()));
-                    Bukkit.getScheduler().runTask(DungeonsClassPlugin.getInstance(), () ->
-                            Message.ActionBar.send(player, "&6Regenerando sua vida: &e" +
-                                    DecimalFormatUtil.format(health.getCurrentValue()) + " &f/ " + health.getBaseValue()));
-                }
-            }
-        }, 20, 20 * 3);
+                        Optional<MemberClass> memberClassOpt = service.findById(uuid);
+                        if (memberClassOpt.isEmpty()) continue;
+
+                        MemberClass memberClass = memberClassOpt.get();
+                        Attribute health = memberClass.getAttribute(AttributeType.MAX_HEALTH);
+
+                        if (health == null) continue;
+
+                        boolean didRegen = regenEngine.tick(health);
+
+                        if (didRegen) {
+                            double current = health.getCurrentValue();
+                            double base = health.getBaseValue();
+
+                            Bukkit.getScheduler().runTask(DungeonsClassPlugin.getInstance(), () ->
+                                    Message.ActionBar.send(player,
+                                            "&4❤ " + DecimalFormatUtil.format(current).replace(",", ".")
+                                                    + "/" + DecimalFormatUtil.format(base).replace(",", "."))
+                            );
+                        }
+                    }
+                },
+                20L, 20L * 3
+        );
     }
-
 }
+
 

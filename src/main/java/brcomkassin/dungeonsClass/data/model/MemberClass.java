@@ -1,6 +1,6 @@
 package brcomkassin.dungeonsClass.data.model;
 
-import brcomkassin.dungeonsClass.DungeonClassAPI;
+import brcomkassin.dungeonsClass.api.DungeonClassAPI;
 import brcomkassin.dungeonsClass.attribute.Attribute;
 import brcomkassin.dungeonsClass.attribute.AttributeCategory;
 import brcomkassin.dungeonsClass.attribute.AttributeType;
@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.*;
 
 @Getter

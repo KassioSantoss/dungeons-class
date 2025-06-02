@@ -1,4 +1,4 @@
-package brcomkassin.dungeonsClass;
+package brcomkassin.dungeonsClass.api;
 
 import brcomkassin.dungeonsClass.data.cache.DungeonClassInMemory;
 import brcomkassin.dungeonsClass.data.service.MemberClassService;
@@ -98,17 +98,6 @@ public class DungeonClassAPI {
      */
     public PlayerAttributeManager getPlayerAttributeManager() {
         return provider.getPlayerAttributeManager();
-    }
-
-    /**
-     * Obtém o sistema de armazenamento em memória.
-     * Acesso direto ao cache de classes e dados de jogadores.
-     * Use com cuidado - preferir os gerenciadores quando possível.
-     *
-     * @return DungeonClassInMemory
-     */
-    public DungeonClassInMemory getDungeonClassInMemory() {
-        return provider.getDungeonClassInMemory();
     }
 
     public MemberClassService getMemberClassService() {

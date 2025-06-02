@@ -69,6 +69,7 @@ public class DungeonClassCommand implements CommandExecutor, TabExecutor {
                     String action = args[1].toLowerCase();
 
                     int amount;
+
                     try {
                         amount = Integer.parseInt(args[2]);
                         if (amount < 0) {
@@ -99,22 +100,17 @@ public class DungeonClassCommand implements CommandExecutor, TabExecutor {
                     if (action.equals("add")) {
                         targetClass.addAttributePoints(amount);
                         service.save(targetClass);
-                        Message.Chat.send(player, "&aAdicionado &e" + amount + " &aponto(s) ao jogador &e" + target.getName());
                     } else if (action.equals("set")) {
                         targetClass.setAttributePoints(amount);
                         service.save(targetClass);
-                        Message.Chat.send(player, "&aSetado para &e" + amount + " &aponto(s) o jogador &e" + target.getName());
                     }
-
                     if (!target.getName().equalsIgnoreCase(player.getName())) {
                         Message.Chat.send(target, "&eSeus pontos de atributos foram " +
                                 (action.equals("set") ? "setados" : "aumentados") +
                                 " para &a" + targetClass.getAttributePoints());
                     }
-
                     return true;
                 }
-
                 Message.Chat.send(player, "&cUso correto: /classe pontos <add/set> <quantia> [jogador]");
                 return false;
             }
